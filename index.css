@@ -1,11 +1,48 @@
 body {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    padding: 0;
-    margin: 0;
+    margin: 0px; 
     overflow: hidden;
+    background-color: black;
 }
+
+#Settings {
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#Settings div {
+    margin: auto;
+    text-align: center;
+}
+
+#Settings div input {
+    margin: auto;
+}
+
 canvas {
-    background-color: lightgray;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+}
+
+#ButtonList {
+    text-align: center;
+}
+
+#ButtonList li {
+    border-radius: 0px;
+}
+
+#ButtonList Button {
+    background-color: rgba(128, 128, 128, 0.1);
+
+}
+
+.w-12-5 {
+    width: 12.5%;
 }

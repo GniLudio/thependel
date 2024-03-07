@@ -4,12 +4,115 @@
     <script>console.log("index.html loaded");</script>
     <meta charset="UTF-8" />
     <title>The Pendulum</title>
+    
+    <!-- Fontawesome icons. -->
+    <script src="https://kit.fontawesome.com/ddfb85fea0.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Function for initializing the value of an output element. -->
+    <script>
+        function initOutputValue() {
+            const divElement = document.scripts[document.scripts.length - 1].parentNode.parentNode;
+            divElement.querySelector("output").innerHTML = divElement.querySelector("input").value;
+        }
+    </script>
+    <!-- Function for updating the value of an output element. -->
+    <script>
+        function updateOutputValue(i) {
+            const divElement = i.parentNode;
+            divElement.querySelector("output").innerHTML = divElement.querySelector("input").value;
+        }
+    </script>
+
+    <!-- Scripts for drawing on the canvas. -->
+    <script src="matrix.js"></script>
+    <script src="pendulum.js"></script>
+    <script src="index.js"></script>
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="index.css" />
 </head>
 <body>
+    <!-- The button list. (buttons added through javascript) -->
+    <ul class="list-group list-group-horizontal" id="ButtonList"> 
+        <li class="list-group-item" id="RefreshButton">
+            <button class="btn">
+                <i class="fa-solid fa-rotate-right"></i>
+            </button>
+        </li>
+        <li class="list-group-item" id="AddButton">
+            <button class="btn">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </li>
+    </ul>
+    <form id="Settings" class="collapse">
+        <div class="row">
+            <div class="w-25" id="length">
+                <label class="form-label">Length</label>
+                <input type="range" class="form-range" min="0" max="999" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="w-25" id="size">
+                <label class="form-label">Size</label>
+                <input type="range" class="form-range" min="1" max="100" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="w-25" id="rotationSpeed">
+                <label class="form-label">Rotation Speed</label>
+                <input type="range" class="form-range" min="0" max="100" step="0.01" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+
+            <div class="w-25" id="degrees">
+                <label class="form-label">Degrees</label>
+                <input type="range" class="form-range" min="0" max="360" step="0.01" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+        </div>
+        <div class="row">
+            <div class="w-12-5" id="length_growth_speed">
+                <label class="form-label">Length<br/>Amplitude</label>
+                <input type="range" class="form-range" min="0" max="10" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="w-12-5" id="length_growth_interval">
+                <label class="form-label">Length<br/>Frequency</label>
+                <input type="range" class="form-range" min="0" max="10" steps="0.01">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="w-12-5" id="size_growth_speed">
+                <label class="form-label">Size<br/>Amplitude</label>
+                <input type="range" class="form-range" min="0" max="10" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="w-12-5" id="size_growth_interval">
+                <label class="form-label">Size<br/>Frequency</label>
+                <input type="range" class="form-range" min="0" max="10" steps="0.01" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>
+            </div>
+            <div class="col" id="clockwise">
+                <label class="form-check-label">Clockwise<br/>Rotation</label><br/>
+                <input class="form-check-input" type="checkbox"></i>
+            </div>
+            <div class="col" id="passRotation">
+                <label class="form-check-label">Pass<br/>Rotation</label><br/>
+                <input class="form-check-input" type="checkbox">
+            </div>
+            <div class="col" id="color">
+                <label class="form-label">Color</label>
+                <input type="color" class="form-control form-control-color">
+            </div>
+            <div class="w-12-5"></div>
+        </div>
+    </form>
+
     <canvas role="presentation">
         The pendulum drawing.
-        <script src="canvas.js"></script>
     </canvas>
+
 </body>
 </html>
