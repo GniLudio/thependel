@@ -15,9 +15,15 @@ let context;
  * The pendulum.
  * @type Pendulum
  */
-const rootPendulum = new Pendulum(300, 180, 0, 50, "#FF0000", undefined, undefined, 
-    new Pendulum(50, 0, 0, 25, "#00FF00")
-)
+let rootPendulum = new Pendulum();
+{
+    const pendulumCount = 5;
+    let lastPendulum = rootPendulum;
+    for (let i=1; i<pendulumCount; i++) {
+        lastPendulum.nestedPendulum = new Pendulum();
+        lastPendulum = lastPendulum.nestedPendulum;
+    }
+}
 
 /**
  * The pendulum for which the settings are open.
@@ -34,9 +40,25 @@ let time;
  */
 let paused;
 
+/**
+ * All settings. (id, event, getValue, setValue, updateInput)
+ */
+const settings = [
+    ["length", "input", element => Number(element.value), value => getPendulum(openedPendelum).length = value, inputElement => inputElement.value = getPendulum(openedPendelum).length],
+    ["degrees", "input", element => Number(element.value), value => getPendulum(openedPendelum).degrees = value, inputElement => inputElement.value = getPendulum(openedPendelum).degrees],
+    ["rotationSpeed", "input", element => Number(element.value), value => getPendulum(openedPendelum).rotationSpeed = value, inputElement => inputElement.value = getPendulum(openedPendelum).rotationSpeed],
+    ["size", "input", element => Number(element.value), value => getPendulum(openedPendelum).size = value, inputElement => inputElement.value = getPendulum(openedPendelum).size],
+    ["color", "input", element => element.value, value => getPendulum(openedPendelum).color = value, inputElement => inputElement.value = getPendulum(openedPendelum).color],
+    ["clockwise", "change", element => element.checked, value => getPendulum(openedPendelum).clockwise = value, inputElement => inputElement.checked = getPendulum(openedPendelum).clockwise],
+    ["nestedRotation", "change", element => element.checked, value => getPendulum(openedPendelum).nestedRotation = value, inputElement => inputElement.checked = getPendulum(openedPendelum).nestedRotation],
+    ["visible", "change", element => element.checked, value => getPendulum(openedPendelum).visible = value, inputElement => inputElement.checked = getPendulum(openedPendelum).visible],
+];
+
 
 // event listeners
 document.addEventListener("DOMContentLoaded", () => { 
+    document.addEventListener("focus", _ => { paused = false; document.title = "The Pendulum"; });
+    document.addEventListener("blur", _ => { paused = true; document.title = "The Pendulum (Paused)" });
     // gets the canvas
     canvas = document.querySelector("canvas");
     refreshCanvas();
@@ -49,21 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
         setupPendulum(pendulum);
     }
     // setup settings
-    const settings = [
-        ["length", "input", element => Number(element.value), value => getPendulum(openedPendelum).length = value],
-        ["degrees", "input", element => Number(element.value), value => getPendulum(openedPendelum).degrees = value],
-        ["rotationSpeed", "input", element => Number(element.value), value => getPendulum(openedPendelum).rotationSpeed = value],
-        ["size", "input", element => Number(element.value), value => getPendulum(openedPendelum).size = value],
-        ["color", "input", element => element.value, value => getPendulum(openedPendelum).color = value],
-        ["clockwise", "change", element => element.checked, value => getPendulum(openedPendelum).clockwise = value],
-        ["passRotation", "change", element => element.checked, value => getPendulum(openedPendelum).passRotation = value],
-    ]
     for (const [id, eventName, getter, setter] of settings) {
-        const element = getSettingInput(id);
-        element.addEventListener(eventName, _ => setter(getter(element)));
-        element.addEventListener(eventName, refreshCanvas);
-        console.log(id, eventName, getter, setter, element);
-        element.addEventListener("mouseup", _ => requestAnimationFrame(refreshCanvas));
+        const inputElement = getSettingInput(id);
+        inputElement.addEventListener(eventName, _ => setter(getter(inputElement)));
+        //inputElement.addEventListener(eventName, refreshCanvas);
+        inputElement.addEventListener("mouseup", _ => requestAnimationFrame(refreshCanvas));
     }
     // starts animation
     animate();
@@ -149,13 +161,14 @@ function toggleSettings(i) {
         getPendulumLi(i).firstChild.classList.add("active");
 
         // updates the ui values
-        getSettingInput("length").value = getPendulum(openedPendelum).length;
-        getSettingInput("degrees").value = getPendulum(openedPendelum).degrees;
-        getSettingInput("rotationSpeed").value = getPendulum(openedPendelum).rotationSpeed;
-        getSettingInput("size").value = getPendulum(openedPendelum).size;
-        getSettingInput("color").value = getPendulum(openedPendelum).color;
-        getSettingInput("clockwise").checked = getPendulum(openedPendelum).clockwise;
-        getSettingInput("passRotation").checked = getPendulum(openedPendelum).passRotation;
+        for (const [id, eventNam, getter, setter, updateInput] of settings) {
+            const inputElement = getSettingInput(id);
+            updateInput(inputElement);
+            const outputElement = getSettingOutput(id);
+            if (outputElement) {
+                outputElement.innerHTML = getter(inputElement);
+            }
+        }
     } else {
         openedPendelum = undefined;
         getSettings().classList.add("collapse");
@@ -214,3 +227,10 @@ function getSettings() { return document.getElementById("Settings");}
  * @returns The input element.
  */
 function getSettingInput(id) { return document.getElementById(id).querySelector("input"); }
+
+/**
+ * Gets the output element of a pendulum setting.
+ * @param {*} id The id.
+ * @returns The output element.
+ */
+function getSettingOutput(id) { return document.getElementById(id).querySelector("output");}

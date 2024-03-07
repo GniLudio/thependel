@@ -46,3 +46,18 @@ canvas {
 .w-12-5 {
     width: 12.5%;
 }
+
+#repository {
+    position: absolute;
+    left: 4px;
+    bottom: 1px;
+    text-decoration: none;
+}
+
+#author {
+    position: absolute;
+    right: 4px;
+    bottom: 0px;
+    color: gray;
+    font-family:cursive;
+}

@@ -1,39 +1,39 @@
 console.log("pendulum.js loaded");
 
-// FIXME: Modifying the degrees leads to weird jumps.
-
-/**
- * The center of the screen.
- */
-const origin = [0,0,0,1];
-
 /**
  * The pendulum.
  */
 class Pendulum {
+    const 
     /**
-     * The constructor.
-     * @param {number} length The length. 
-     * @param {number} startAngle The angle. 
-     * @param {number} rotationSpeed The rotation speed.
-     * @param {number} size The size.
-     * @param {number} color The color.
-     * @param {boolean} clockwise Whether to rotate clockwise.
-     * @param {boolean} passRotation Whether to pass the rotation to the nested pendulum. 
-     * @param {Pendulum | undefined} nestedPendulum The nested pendulum. 
+     * The constructor. (all parameters are optional)
+     * @param {number} length 
+     * @param {number} size 
+     * @param {number} rotationSpeed 
+     * @param {number} degrees 
+     * @param {number} lengthAmplitude 
+     * @param {number} lengthFrequency 
+     * @param {number} sizeAmplitude 
+     * @param {number} sizeFrequency 
+     * @param {boolean} clockwise 
+     * @param {boolean} nestedRotation 
+     * @param {string} color 
+     * @param {boolean} visible 
      */
-    constructor(length, startAngle, rotationSpeed, size, color, clockwise = false, passRotation = false, nestedPendulum = null, visible=true) {
-        this.length = length;
-        this.degrees = startAngle;
-        this.rotationSpeed = rotationSpeed;
-        this.size = size;
-        this.color = color;
-        this.passRotation = passRotation;
-        this.clockwise = clockwise;
+    constructor(length, size, rotationSpeed, degrees, lengthAmplitude, lengthFrequency, sizeAmplitude, sizeFrequency, clockwise, nestedRotation, color, visible, nestedPendulum) {
+        this.length = length ?? randomInRange(25, 250);
+        this.size = size ?? randomInRange(1, 10);
+        this.degrees = degrees ?? randomInRange(0, 360);
+        this.rotationSpeed = rotationSpeed ?? randomInRange(10, 50);
+        this.color = color ?? randomColor();
+        this.lengthAmplitude = lengthAmplitude ?? randomInRange(0, 100);
+        this.lengthFrequency = lengthFrequency ?? randomInRange(0.1, 10);
+        this.nestedRotation = nestedRotation!=undefined ? nestedRotation : randomBoolean();
+        this.clockwise = clockwise!=undefined ? clockwise : randomBoolean(0.75);
+        this.visible = visible!=undefined ? visible : true;
         this.nestedPendulum = nestedPendulum;
-        this.visible = visible;
+
         this.lastPoint = [undefined, undefined];
-        this.lastDegrees = undefined;
     }
 
     /**
@@ -47,9 +47,8 @@ class Pendulum {
         const rotationMatrix = TransformationMatrix.rotateZ(this.degrees * Math.PI / 180);
         const translationMatrix = TransformationMatrix.translate(this.length);
         const newMatrix = translationMatrix.concatenate(rotationMatrix).concatenate(matrix);
-        const newPoint = newMatrix.apply(origin);
+        const newPoint = newMatrix.apply([0,0,0,1]);
 
-        // TODO: calculate control point required for a perfect circle
         if (this.visible) {
             context.beginPath();
             context.moveTo(this.lastPoint[0], this.lastPoint[1]);
@@ -61,7 +60,7 @@ class Pendulum {
 
         if (this.nestedPendulum) {
             let nestedMatrix = newMatrix;
-            if (!this.passRotation) {
+            if (!this.nestedRotation) {
                 const inverseRotationMatrix = TransformationMatrix.rotateZ(-this.degrees * Math.PI / 180);
                 nestedMatrix = inverseRotationMatrix.concatenate(nestedMatrix);
             }
@@ -71,3 +70,4 @@ class Pendulum {
         this.lastPoint = newPoint;
     }
 }
+

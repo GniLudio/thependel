@@ -1,4 +1,4 @@
-console.log("transformations.js loaded")
+console.log("matrix.js loaded")
 
 /**
  * A 4x4 transformation matrix which can be used to represent/combine all transformations of a 3D/2D space:
