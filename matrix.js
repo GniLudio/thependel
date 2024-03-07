@@ -112,8 +112,8 @@ class TransformationMatrix {
     static rotate(x = undefined, y = undefined, z = undefined) {
         let result = new TransformationMatrix();
         if (x) result = result.concatenate(TransformationMatrix.rotateX(x));
-        if (y) result = result.concatenate(TransformationMatrix.rotateX(y));
-        if (z) result = result.concatenate(TransformationMatrix.rotateX(z));
+        if (y) result = result.concatenate(TransformationMatrix.rotateY(y));
+        if (z) result = result.concatenate(TransformationMatrix.rotateZ(z));
         return result;
     }
 
@@ -125,8 +125,8 @@ class TransformationMatrix {
     static rotateX(angle) {
         const result = new TransformationMatrix();
         result.matrix[1][1] = Math.cos(angle);
-        result.matrix[1][2] = -Math.sin(angle);
-        result.matrix[2][1] = Math.sin(angle);
+        result.matrix[1][2] = Math.sin(angle);
+        result.matrix[2][1] = -Math.sin(angle);
         result.matrix[2][2] = Math.cos(angle);
         return result;
     }
@@ -139,8 +139,8 @@ class TransformationMatrix {
     static rotateY(angle) {
         const result = new TransformationMatrix();
         result.matrix[0][0] = Math.cos(angle);
-        result.matrix[0][2] = Math.sin(angle);
-        result.matrix[2][0] = -Math.sin(angle);
+        result.matrix[0][2] = -Math.sin(angle);
+        result.matrix[2][0] = Math.sin(angle);
         result.matrix[2][2] = Math.cos(angle);
         return result;
     }

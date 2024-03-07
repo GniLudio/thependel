@@ -40,7 +40,6 @@
     <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-    <!-- The button list. (buttons added through javascript) -->
     <ul class="list-group list-group-horizontal" id="ButtonList"> 
         <li class="list-group-item" id="RefreshButton">
             <button class="btn">
@@ -53,7 +52,7 @@
             </button>
         </li>
     </ul>
-    <form id="Settings" class="collapse">
+    <div id="Settings" class="collapse">
         <div class="row">
             <div class="w-25" id="length">
                 <label class="form-label">Length</label>
@@ -71,51 +70,56 @@
                 <output><script>initOutputValue()</script></output>
             </div>
 
-            <div class="w-25" id="degrees">
-                <label class="form-label">Degrees</label>
+            <div class="w-25" id="angle">
+                <label class="form-label">Angle</label>
                 <input type="range" class="form-range" min="0" max="360" step="0.01" oninput="updateOutputValue(this)">
-                <output><script>initOutputValue()</script></output>
+                <output><script>initOutputValue()</script></output>°
             </div>
         </div>
         <div class="row">
             <div class="w-12-5" id="lengthAmplitude">
-                <label class="form-label">Length<br/>Amplitude</label>
+                <label class="form-label">Length Amplitude</label>
                 <input type="range" class="form-range" min="0" max="100" oninput="updateOutputValue(this)">
                 <output><script>initOutputValue()</script></output>
             </div>
             <div class="w-12-5" id="lengthFrequency">
-                <label class="form-label">Length<br/>Frequency</label>
-                <input type="range" class="form-range" min="0.1" max="10" step="0.1" oninput="updateOutputValue(this)">
-                <output><script>initOutputValue()</script></output>
+                <label class="form-label">Length Frequency</label>
+                <input type="range" class="form-range" min="0" max="10" step="0.01" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>s
             </div>
             <div class="w-12-5" id="sizeAmplitude">
-                <label class="form-label">Size<br/>Amplitude</label>
+                <label class="form-label">Size Amplitude</label>
                 <input type="range" class="form-range" min="0" max="100" oninput="updateOutputValue(this)">
                 <output><script>initOutputValue()</script></output>
             </div>
             <div class="w-12-5" id="sizeFrequency">
-                <label class="form-label">Size<br/>Frequency</label>
-                <input type="range" class="form-range" min="0.1" max="10" step="0.1" oninput="updateOutputValue(this)">
-                <output><script>initOutputValue()</script></output>
+                <label class="form-label">Size Frequency</label>
+                <input type="range" class="form-range" min="0" max="10" step="0.01" oninput="updateOutputValue(this)">
+                <output><script>initOutputValue()</script></output>s
             </div>
             <div class="col" id="clockwise">
-                <label class="form-check-label">Clockwise<br/>Rotation</label><br/>
+                <label class="form-check-label">Clockwise Rotation</label><br/>
                 <input class="form-check-input" type="checkbox"></i>
             </div>
             <div class="col" id="nestedRotation">
-                <label class="form-check-label">Nested<br/>Rotation</label><br/>
+                <label class="form-check-label">Nested Rotation</label><br/>
                 <input class="form-check-input" type="checkbox">
             </div>
-            <div class="col" id="color">
+            <div id="color" style="width: 10%;">
                 <label class="form-label">Color</label>
                 <input type="color" class="form-control form-control-color">
             </div>
-            <div class="col" id="visible">
+            <div id="visible" style="width: 7.5%;">
                 <label class="form-check-label">Visible</label><br/>
                 <input class="form-check-input" type="checkbox">
             </div>
+            <div id="remove" style="width: 7.5%;">
+                <button class="btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
-    </form>
+    </div>
 
     <canvas role="presentation">
         The pendulum drawing.

@@ -23,6 +23,11 @@ body {
     margin: auto;
 }
 
+#Settings label {
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+
 canvas {
     position: absolute;
     top: 0px;
@@ -36,11 +41,12 @@ canvas {
 
 #ButtonList li {
     border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 5px;
 }
 
 #ButtonList Button {
     background-color: rgba(128, 128, 128, 0.1);
-
 }
 
 .w-12-5 {
@@ -60,4 +66,9 @@ canvas {
     bottom: 0px;
     color: gray;
     font-family:cursive;
+}
+
+#remove button {
+    color: red;
+    margin: auto;
 }
