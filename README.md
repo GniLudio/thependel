@@ -10,10 +10,10 @@ The project can be found on [thependel.art](https://thependel.art/).
 ## Keyboard Shortcuts
 |Key|Description|
 |:---:|:---:|
-| `F5` | Clears the canvas and randomizes all pendulum properties. |
+| `+` | Adds a pendulum. |
+| `-` | Removes the last pendulum. |
+| `F5` | Clears the canvas and randomizes all properties. |
 | `Shift` + `F5` | Clears the canvas. |
 | `1-9` | Toggles the settings. |
 | `Esc` | Closes the settings. |
-| `+` | Adds a pendulum. |
-| `-` | Removes the last pendulum. |
 | `Spacebar` | Pause / Unpause |
