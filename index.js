@@ -13,7 +13,7 @@ let canvas;
 let context;
 
 /**
- * The pendulum.
+ * The root pendulum.
  * @type Pendulum
  */
 let rootPendulum;
@@ -21,16 +21,16 @@ let rootPendulum;
 /**
  * The initial pendulum count.
  */
-const pendulumCount = 3;
+const pendulumCount = 10;
 
 /**
  * The pendulum for which the settings are open.
- * @type {number}
+ * @type {number | undefined}
  */
 let openedPendelum = undefined;
 
 /**
- * The last time the pendulum was updated.
+ * The last time the animation was updated.
  * @type {number}
  */
 let time;
@@ -43,21 +43,30 @@ let paused = false;
 
 /**
  * All settings.
- * @type {[id: string, event: string, getValue: (element: HTMLElement) => unknown, setValue: (value: unknown) => void, updateInput: (inputElement: HTMLElement) => void][]}
+ * @type {[
+ *  id: string, 
+ *  eventName: string, 
+*   getInputValue: (inputElement: HTMLElement) => unknown, 
+*   setInputValue: (inputElement: HTMLElement, value: unknown) => void,
+ * ][]}
  */
 const settings = [
-    ["length", "input", element => Number(element.value), value => getPendulum(openedPendelum).length = value, inputElement => inputElement.value = getPendulum(openedPendelum).length],
-    ["angle", "input", element => Number(element.value), value => getPendulum(openedPendelum).angle = value, inputElement => inputElement.value = getPendulum(openedPendelum).angle],
-    ["rotationSpeed", "input", element => Number(element.value), value => getPendulum(openedPendelum).rotationSpeed = value, inputElement => inputElement.value = getPendulum(openedPendelum).rotationSpeed],
-    ["size", "input", element => Number(element.value), value => getPendulum(openedPendelum).size = value, inputElement => inputElement.value = getPendulum(openedPendelum).size],
-    ["color", "input", element => element.value, value => getPendulum(openedPendelum).color = value, inputElement => inputElement.value = getPendulum(openedPendelum).color],
-    ["clockwise", "change", element => element.checked, value => getPendulum(openedPendelum).clockwise = value, inputElement => inputElement.checked = getPendulum(openedPendelum).clockwise],
-    ["nestedRotation", "change", element => element.checked, value => getPendulum(openedPendelum).nestedRotation = value, inputElement => inputElement.checked = getPendulum(openedPendelum).nestedRotation],
-    ["visible", "change", element => element.checked, value => getPendulum(openedPendelum).visible = value, inputElement => inputElement.checked = getPendulum(openedPendelum).visible],
+    ["length", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["size", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["rotationSpeed", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["angle", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = roundToDecimal(value, 2)],
+    ["lengthAmplitude", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["lengthFrequency", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["sizeAmplitude", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["sizeFrequency", "input", inputElement => Number(inputElement.value), (inputElement, value) => inputElement.value = value],
+    ["clockwise", "change", inputElement => inputElement.checked, (inputElement, value) => inputElement.checked = value],
+    ["color", "input", e => e.value, (e,v) => e.value = v],
+    ["nestedRotation", "change", inputElement => inputElement.checked, (inputElement, value) => inputElement.checked = value],
+    ["visible", "change", inputElement => inputElement.checked, (inputElement, value) => inputElement.checked = value],
 ];
 
 // setup events
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", event => { 
     // gets the canvas
     canvas = document.querySelector("canvas");
     // gets the drawing context and 
@@ -79,11 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
         addPendulum();
     }
     // setup settings
-    for (const [id, eventName, getter, setter] of settings) {
+    for (const [id, eventName, getInputValue, setInputValue] of settings) {
         const inputElement = getSettingInput(id);
-        inputElement.addEventListener(eventName, _ => setter(getter(inputElement)));
-        //inputElement.addEventListener(eventName, refreshCanvas);
-        inputElement.addEventListener("mouseup", _ => requestAnimationFrame(clearCanvas));
+        inputElement.addEventListener(eventName, _ => {
+            const value = getInputValue(inputElement);
+            const pendulum = getPendulum(openedPendelum);
+            pendulum[id] = value;
+        });
     }
     // starts animation
     animate();
@@ -97,7 +108,15 @@ window.addEventListener("resize", () => {
 document.addEventListener("keydown", event => {
     // F5 - clears the canvas
     if (event.key == "F5") {
-        clearCanvas();
+        if (!event.shiftKey) {
+            let lastPendulum = rootPendulum;
+            while (lastPendulum.nestedPendulum != undefined) {
+                lastPendulum.refresh();
+                lastPendulum = lastPendulum.nestedPendulum;
+            }
+        }
+        requestAnimationFrame(clearCanvas);
+        updateSettings();
         event.preventDefault();
     }
     // 1-9 - Toggles the settings.
@@ -121,33 +140,35 @@ document.addEventListener("keydown", event => {
         }
         removePendulum(i);
     }
-    console.log(event.key)
+    else if (event.key == " ") {
+        paused = !paused;
+        document.title = !paused ? "The Pendulum" : "The Pendulum (Paused)";
+    }
 });
-document.addEventListener("focus", _ => { paused = false; document.title = "The Pendulum"; });
-document.addEventListener("blur", _ => { paused = true; document.title = "The Pendulum (Paused)" });
 
 /**
  * Animates the pendulum.
- * @param {MouseEvent} event 
  */
 function animate() {
     // calculates deltaTime since last animate
     const deltaTime = (document.timeline.currentTime - time) / 1000;
-    // saves context
-    context.save();
-    // cartisian coordinate system
-    context.translate(0, canvas.height);
-    context.scale(1,-1);
-
-    // center is (0,0)
-    context.translate(canvas.width/2, canvas.height/2);
-    // animate the pendulums
     if (!paused) {
+        // saves context
+        context.save();
+        // cartisian coordinate system
+        context.translate(0, canvas.height);
+        context.scale(1,-1);
+
+        // center is (0,0)
+        context.translate(canvas.width/2, canvas.height/2);
+        
+        // animate the pendulums
         rootPendulum.draw(context, new TransformationMatrix(), deltaTime);
+        // resets the context
+        context.restore();
+        // store time for deltaTime
     }
-    // resets the context
-    context.restore();
-    // store time for deltaTime
+
     time = document.timeline.currentTime;
     requestAnimationFrame(animate);
 }
@@ -175,7 +196,7 @@ function toggleSettings(i) {
         return;
     }
     // deactives previous pendulum button
-    if (openedPendelum != undefined) {
+    if (openedPendelum != undefined && getPendulum(openedPendelum) != undefined) {
         getPendulumLi(openedPendelum).firstChild.classList.remove("active");
     }
     // open, if settings for the pendulum wasn't already open
@@ -186,13 +207,13 @@ function toggleSettings(i) {
         getPendulumLi(i).firstChild.classList.add("active");
 
         // updates the ui values
-        for (const [id, eventName, getter, setter, updateInput] of settings) {
+        for (const [id, _, getInputValue, setInputValue] of settings) {
             const inputElement = getSettingInput(id);
-            updateInput(inputElement);
+            const value = getPendulum(openedPendelum)[id];
+            console.log(id, value);
+            setInputValue(inputElement, value);;
             const outputElement = getSettingOutput(id);
-            if (outputElement) {
-                outputElement.innerHTML = getter(inputElement);
-            }
+            if (outputElement) outputElement.innerHTML = getInputValue(inputElement);
         }
     } else {
         openedPendelum = undefined;
@@ -201,6 +222,21 @@ function toggleSettings(i) {
     }
 }
 
+/**
+ * Opens the opened settings.
+ */
+function updateSettings() {
+    if (openedPendelum != undefined) {
+        const i = openedPendelum;
+        toggleSettings(i);
+        toggleSettings(i);
+    }
+
+}
+
+/**
+ * Adds a pendulum;
+ */
 function addPendulum() {
     const pendulum = new Pendulum();
     if (rootPendulum == undefined) {
@@ -237,10 +273,7 @@ function removePendulum(i = openedPendelum) {
     if (i == 0) {
         if (rootPendulum.nestedPendulum == undefined) {
             rootPendulum = new Pendulum();
-            requestAnimationFrame(clearCanvas);
-            if (openedPendelum == 0) {
-                toggleSettings(0);
-            }
+            updateSettings();
             return;
         } else {
             rootPendulum = rootPendulum.nestedPendulum;
@@ -259,9 +292,12 @@ function removePendulum(i = openedPendelum) {
     updatePendulumButtons();
 
     if (openedPendelum == i) {
-        toggleSettings(i);
+        if (i == 0) {
+            updateSettings();
+        } else {
+            toggleSettings(i-1);
+        }
     }
-    requestAnimationFrame(clearCanvas);
 }
 
 /**

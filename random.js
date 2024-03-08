@@ -36,3 +36,15 @@ function randomBoolean(chance = 0.5) {
 function randomColor(colors = ["#000000", "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"]) {
     return "#" + Math.floor(randomInRange(0x000000, 0xFFFFFF)).toString(16);
 }
+
+/**
+ * Rounds a number to the n-th decimal place.
+ * @param {*} x The number.
+ * @param {*} n The decimal place
+ * @returns The rounded number.
+ */
+function roundToDecimal(x, n) {
+    const e = 10**n;
+    const r = Math.round(x * e) / e;
+    return r;
+}
