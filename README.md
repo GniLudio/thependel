@@ -1,8 +1,7 @@
 # The Pendulum
+>This art project draws pendulums on the canvas.
 
-This art project draws pendulums on the canvas.
-
-Each pendulum is attached to its predecessor and is characterised by a set of properties.
+![canvas](https://github.com/GniLudio/thependel/assets/50866361/2a266b33-5d80-40bc-9aa9-a78db7e47753)
 
 ## Website
 The project can be found on [https://gniludio.github.io/thependel/](https://gniludio.github.io/thependel/).
