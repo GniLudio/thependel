@@ -20,6 +20,9 @@ window.onload = function() {
 }
 
 // Animation
+/**
+ * Called each frame.
+ */
 function run() {
     // Keep animating
     window.requestAnimationFrame(run);
@@ -41,6 +44,8 @@ function run() {
     // FPS limit not reached, draw animation!
     animate();
 }
+/**
+ * Updates the animation.
+ */
 function animate() {
-    console.log("animate");
 }
