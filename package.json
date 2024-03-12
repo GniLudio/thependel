@@ -1,0 +1,24 @@
+{
+  "name": "thependel",
+  "version": "1.0.0",
+  "description": "An art project where pendulums draw on a canvas.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GniLudio/thependel.git"
+  },
+  "author": "Ferdinand Rohlfing",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GniLudio/thependel/issues"
+  },
+  "homepage": "https://github.com/GniLudio/thependel#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.26",
+    "typescript": "^5.4.2"
+  }
+}
