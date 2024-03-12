@@ -5,10 +5,24 @@ console.log("transformationMatrix.ts loaded");
  * * Translation, Rotation, Scaling, Shearing, Mirroring.
  */
 class TransformationMatrix {
+    /**
+     * The data.
+     */
     private readonly data: Matrix;
-    constructor(data: Matrix = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]) {
+
+    /**
+     * The constructor.
+     * @param data The initial matrix.
+     */
+    constructor(data: Matrix = [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]) {
         this.data = data;
     }
+
+    /**
+     * Applies the transformation matrix to a point.
+     * @param point The point.
+     * @returns The tranformed point.
+     */
     apply(point: Point): Point {
         const result: Point = [undefined!, undefined!, undefined!, undefined!];
         for (let i = 0; i < 4; i++)
@@ -22,6 +36,11 @@ class TransformationMatrix {
         return result;
     }
 
+    /**
+     * Concatenates the two transformation matrices.
+     * @param other The other matrix.
+     * @returns The combined matrix.
+     */
     concatenate(other: TransformationMatrix): TransformationMatrix {
         const result = new TransformationMatrix();
         for (let i = 0; i < 4; i++) {
@@ -37,16 +56,11 @@ class TransformationMatrix {
     }
 
     /**
-     * Creates a deep copy.
-     * @returns The copy.
+     * Converts the matrix to a string rerpesentation.
+     * @returns 
      */
-    private copy(): TransformationMatrix {
-        return new TransformationMatrix([
-            [this.data[0][0], this.data[0][1], this.data[0][2], this.data[0][3]],
-            [this.data[1][0], this.data[1][1], this.data[1][2], this.data[1][3]],
-            [this.data[2][0], this.data[2][1], this.data[2][2], this.data[2][3]],
-            [this.data[3][0], this.data[3][1], this.data[3][2], this.data[3][3]],
-        ])
+    public toString(): string {
+        return "{\n    " + this.data.map(row => row.join(", ")).join("\n    ") + "\n}";
     }
 
     /**
@@ -56,11 +70,11 @@ class TransformationMatrix {
      * @param z The z translation.
      * @returns The translation matrix.
      */
-    public static translation(x: number = 0, y: number = 0, z: number = 0): TransformationMatrix {
+    public static translation(x?: number, y?: number, z?: number): TransformationMatrix {
         const result = new TransformationMatrix();
-        result.data[0][3] = x;
-        result.data[1][3] = y;
-        result.data[2][3] = z;
+        if (x) result.data[0][3] = x;
+        if (y) result.data[1][3] = y;
+        if (z) result.data[2][3] = z;
         return result;
     }
 
@@ -113,14 +127,6 @@ class TransformationMatrix {
             result = result.concatenate(zRotation);
         }
         return result;
-    }
-
-    /**
-     * Converts the matrix to a string rerpesentation.
-     * @returns 
-     */
-    public toString(): string {
-        return "{\n    " + this.data.map(row => row.join(", ")).join("\n    ") + "\n}";
     }
 }
 
