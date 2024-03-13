@@ -14,7 +14,7 @@ class TransformationMatrix {
      * The constructor.
      * @param data The initial matrix.
      */
-    constructor(data: Matrix = [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]) {
+    public constructor(data: Matrix = [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]) {
         this.data = data;
     }
 
@@ -23,7 +23,7 @@ class TransformationMatrix {
      * @param point The point.
      * @returns The tranformed point.
      */
-    apply(point: Point): Point {
+    public apply(point: Point): Point {
         const result: Point = [undefined!, undefined!, undefined!, undefined!];
         for (let i = 0; i < 4; i++)
         {
@@ -41,7 +41,7 @@ class TransformationMatrix {
      * @param other The other matrix.
      * @returns The combined matrix.
      */
-    concatenate(other: TransformationMatrix): TransformationMatrix {
+    public concatenate(other: TransformationMatrix): TransformationMatrix {
         const result = new TransformationMatrix();
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {

@@ -58,13 +58,3 @@ function printTree(root: Pendulum, pendulums: Pendulum[], indent: string = ""): 
     console.log(indent + pendulums.indexOf(root));
     root.children.forEach(child => printTree(child, pendulums, indent + "-"));
 }
-
-/**
- * Generates a integer between a minimum and a maximum integer.
- * @param min The minimum. (inclusive)
- * @param max The maximum. (inclusive)
- * @returns The random number.
- */
-function randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}

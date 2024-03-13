@@ -1,3 +1,5 @@
+type Settings = UserSettings & GeneralSettings;
+
 interface UserSettings {
     pendulum_count: number,
 }
@@ -17,3 +19,7 @@ interface WallpaperListener {
     userDirectoryFilesAddedOrChanged?(propertyName: string, changedFiles: string[]): void;
     userDirectoryFilesRemoved?(propertyName: string, removedFiles: string[]): void;
 }
+
+type Color = [r: number, g: number, b: number, a: number]
+
+type RotationDirection = "clockwise" | "anti-clockwise";
