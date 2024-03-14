@@ -2,8 +2,24 @@ html, body {
     margin: 0px;
     border: 0px;
     padding: 0px;
+    overflow: hidden;
 }
 
 canvas {
     position: absolute;
+}
+
+a, p {
+    position: absolute;
+    bottom: 0px;
+    margin: 4px;
+    opacity: 0.5;
+}
+
+a {
+    left: 0px;
+}
+
+p {
+    right: 0px;
 }

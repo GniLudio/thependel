@@ -2,6 +2,10 @@ type Settings = UserSettings & GeneralSettings;
 
 interface UserSettings {
     pendulum_count: number,
+    refreshInterval: number,
+    initialDuration: number,
+    hideAuthor: boolean,
+    hideRepo: boolean,
 }
 
 interface GeneralSettings {

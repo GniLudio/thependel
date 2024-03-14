@@ -11,7 +11,7 @@ function generatePendulumTree(n: number = settings.pendulum_count + 1): Pendulum
     for (let i=0; i<n-2; i++) { sequence.push(randomInt(0, n-1)); }
     // creates n pendulums (labeled from 0 to n-1)
     const pendulums: Pendulum[] = [];
-    for (let i=0; i<n; i++) {pendulums[i] = new Pendulum();}
+    for (let i=0; i<n; i++) {pendulums[i] = new Pendulum(i == 0);}
     // create the list with 0 to n-1
     const list: number[] = [];
     for (let i=0; i<n; i++) {list.push(i);}
@@ -29,9 +29,8 @@ function generatePendulumTree(n: number = settings.pendulum_count + 1): Pendulum
 
     const root = pendulums[0];
     makeTreeDirected(root);
-    root.visible = false;
 
-    printTree(root);
+    //printTree(root);
 
     return pendulums[0];
 

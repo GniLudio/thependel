@@ -23,7 +23,7 @@ function randomFloat(min: number, max:number): number {
  * @returns The random color.
  */
 function randomColor(): Color {
-    return [0,0,0,1];
+    return [Math.random(), Math.random(), Math.random(),1];
 }
 
 /**
