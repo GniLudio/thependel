@@ -2,7 +2,7 @@ console.log("settings.ts loaded");
 
 const settings: Settings = {
     fps: 15,
-    pendulum_count: 5,
+    pendulum_count: 10,
 }
 
 const settingRanges: {[setting: string]: [min: number, max: number]} = {

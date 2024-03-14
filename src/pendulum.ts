@@ -4,11 +4,18 @@ console.log("pendulum.ts loaded");
  * The pendulum.
  */
 class Pendulum {
+    private static count: number = 0;
+
+    /**
+     * The id.
+     */
+    public readonly id: number;
+
     /**
      * The child pendulums.
      */
-    public readonly children: Set<Pendulum> = new Set<Pendulum>();
-    
+    public readonly children: Pendulum[] = [];
+
     /**
      * Whether this pendulum is visible.
      */
@@ -65,6 +72,11 @@ class Pendulum {
     public rotationDirection: RotationDirection;
 
     /**
+     * Whether the rotation is passed down to the children.
+     */
+    public rotationPassedToChildren: boolean;
+
+    /**
      * The canvas element.
      */
     private readonly canvas: HTMLCanvasElement;
@@ -73,9 +85,13 @@ class Pendulum {
      * The constructor.
      */
     public constructor() {
+        this.id = Pendulum.count++;
+
         this.canvas = document.createElement("canvas");
+        this.canvas.setAttribute('pendulum', this.id.toFixed());
         document.body.insertBefore(this.canvas, null);
-        this.resize();
+
+        this.updateSize();
 
         this.length = randomInt(...settingRanges.length);
         this.size = randomFloat(...settingRanges.size);
@@ -87,15 +103,16 @@ class Pendulum {
         this.sizeAmplitude = randomFloat(...settingRanges.sizeAmplitude);
         this.sizeFrequency = randomFloat(...settingRanges.sizeFrequency);
         this.rotationDirection = randomBool() ? "clockwise" : "anti-clockwise";
+        this.rotationPassedToChildren = randomBool();
     }
 
     /**
      * Updates the canvas size.
      */
-    public resize() {
+    public updateSize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.children.forEach(child => child.resize());
+        this.children.forEach(child => child.updateSize());
     }
 
     /**
@@ -107,13 +124,28 @@ class Pendulum {
     }
 
     /**
+     * Updates the hierarchy.
+     */
+    public updateHierarchie() {
+        // children are sorted ascending by their id
+        this.children.sort((a,b) => b.id-a.id);
+        // update canvas hierarchie
+        this.children.reverse().forEach(child => this.canvas.insertBefore(child.canvas, null));
+        // update hierarchie of children
+        this.children.forEach(child => child.updateHierarchie());
+    }
+
+    /**
      * Draws the animation.
      * @param matrix The transformation Matrix.
      */
     public draw(matrix: TransformationMatrix): void {
         if (this.visible) {
-
+            const context = this.canvas.getContext("2d");
         }
         this.children.forEach(child => child.draw(matrix));
     }
 }
+
+
+Pendulum.prototype.toString = () => "asdf";

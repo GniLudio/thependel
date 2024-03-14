@@ -2,10 +2,10 @@ console.log("tree_generator.ts loaded");
 
 /**
  * Generates the pendulum tree with n pendulums using the pruefer sequence.
- * @param n The number of pendulums.
+ * @param n The number of pendulums. (at least 2)
  * @returns The root pendulum.
  */
-function generatePendulumTree(n: number): Pendulum {
+function generatePendulumTree(n: number = settings.pendulum_count + 1): Pendulum {
     // creates the sequence
     const sequence: number[] = [];
     for (let i=0; i<n-2; i++) { sequence.push(randomInt(0, n-1)); }
@@ -27,14 +27,22 @@ function generatePendulumTree(n: number): Pendulum {
     }
     addEdge(list[0], list[1]);
 
-    makeTreeDirected(pendulums[0]);
-    //printTree(pendulums[0], pendulums);
+    const root = pendulums[0];
+    makeTreeDirected(root);
+    root.updateHierarchie();
+    root.visible = false;
+
+    printTree(root);
 
     return pendulums[0];
 
     function addEdge(a: number, b: number): void {
-        pendulums[a].children.add(pendulums[b]);
-        pendulums[b].children.add(pendulums[a]);
+        if (!pendulums[a].children.includes(pendulums[b])) {
+            pendulums[a].children.push(pendulums[b]);
+        }
+        if (!pendulums[b].children.includes(pendulums[a])) {
+            pendulums[b].children.push(pendulums[a]);
+        }
     }
 }
 
@@ -44,7 +52,7 @@ function generatePendulumTree(n: number): Pendulum {
  */
 function makeTreeDirected(root: Pendulum): void {
     for (const child of root.children) {
-        child.children.delete(root);
+        child.children.splice(child.children.indexOf(root), 1);
         makeTreeDirected(child);
     }
 }
@@ -54,7 +62,7 @@ function makeTreeDirected(root: Pendulum): void {
  * @param root The root pendulum.
  * @param indent The indentation level.
  */
-function printTree(root: Pendulum, pendulums: Pendulum[], indent: string = ""): void {
-    console.log(indent + pendulums.indexOf(root));
-    root.children.forEach(child => printTree(child, pendulums, indent + "-"));
+function printTree(root: Pendulum, indent: string = "-"): void {
+    console.log(indent, root.id, root);
+    root.children.forEach(child => printTree(child, indent + "-"));
 }

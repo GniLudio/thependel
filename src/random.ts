@@ -26,6 +26,11 @@ function randomColor(): Color {
     return [0,0,0,1];
 }
 
+/**
+ * Generates a random boolean.
+ * @param a The chance for `true`.
+ * @returns The random boolean.
+ */
 function randomBool(a: number = 0.5): boolean {
     return Math.random() <= a;
 }

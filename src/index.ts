@@ -34,12 +34,11 @@ window.onload = function() {
     refreshPendulums();
 }
 window.onresize = function(event) {
-    pendulum.resize();
+    pendulum.updateSize();
 }
 window.onkeydown = function(event) {
     console.log(event.key);
     if (event.key == "r") {
-        console.log("R");
         refreshPendulums();
     }
 }
@@ -81,6 +80,5 @@ function animate() {
  */
 function refreshPendulums(): void {
     if (pendulum) pendulum.destroy();
-    pendulum = generatePendulumTree(settings.pendulum_count + 1);
-    pendulum.visible = false;
+    pendulum = generatePendulumTree();
 }
