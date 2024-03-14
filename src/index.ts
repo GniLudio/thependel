@@ -14,6 +14,11 @@ let fpsThreshold = 0;
  */
 let pendulum: Pendulum;
 
+/**
+ * The canvas.
+ */
+let canvas: HTMLCanvasElement;
+
 // Events
 window.wallpaperPropertyListener = {
     applyGeneralProperties: function(properties: Partial<GeneralSettings>) {
@@ -30,11 +35,9 @@ window.wallpaperPropertyListener = {
 }
 window.onload = function() {
     console.log("window.onload");
-    window.requestAnimationFrame(run);
+    canvas = document.querySelector("canvas")!;
     refreshPendulums();
-}
-window.onresize = function(event) {
-    pendulum.updateSize();
+    window.requestAnimationFrame(run);
 }
 window.onkeydown = function(event) {
     console.log(event.key);
@@ -79,6 +82,5 @@ function animate() {
  * Refreshes the pendulums.
  */
 function refreshPendulums(): void {
-    if (pendulum) pendulum.destroy();
     pendulum = generatePendulumTree();
 }

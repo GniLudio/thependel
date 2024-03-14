@@ -29,7 +29,6 @@ function generatePendulumTree(n: number = settings.pendulum_count + 1): Pendulum
 
     const root = pendulums[0];
     makeTreeDirected(root);
-    root.updateHierarchie();
     root.visible = false;
 
     printTree(root);
@@ -63,6 +62,6 @@ function makeTreeDirected(root: Pendulum): void {
  * @param indent The indentation level.
  */
 function printTree(root: Pendulum, indent: string = "-"): void {
-    console.log(indent, root.id, root);
+    console.log(indent, root);
     root.children.forEach(child => printTree(child, indent + "-"));
 }
