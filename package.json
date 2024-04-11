@@ -1,8 +1,13 @@
 {
   "name": "thependel",
   "version": "1.0.0",
-  "description": "",
+  "description": "An art project where pendulums draw on a canvas.",
+  "homepage": "https://gniludio.github.io/thependel/",
   "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/GniLudio/thependel/issues",
+    "email": "ferdinand.rohlfing@gmail.com"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,5 +16,9 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GniLudio/thependel"
   }
 }
