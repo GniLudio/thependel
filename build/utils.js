@@ -37,6 +37,5 @@ function randomColor() {
     };
 }
 function colorToString(color) {
-    const s = `rgb(${color.r},${color.g}, ${color.b})`;
-    return s;
+    return `rgb(${color.r},${color.g}, ${color.b})`;
 }

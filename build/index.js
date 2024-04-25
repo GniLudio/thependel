@@ -1,6 +1,10 @@
 "use strict";
 console.log("index.ts loaded");
 /**
+ * The url parameter.
+ */
+const urlParameter = new URLSearchParams(window.location.search);
+/**
  * The drawing canvas.
  */
 const canvas = document.querySelector("canvas");
@@ -15,7 +19,11 @@ let pendulum = new Pendulum();
 /**
  * The pendulum count (of real pendulums).
  */
-let pendulumCount = 6;
+let pendulumCount = Math.max(3, parseInt(urlParameter.get("count") ?? randomIntInRange(5, 10).toFixed()));
+/**
+ * The animation speed.
+ */
+let speed = Math.max(0, parseFloat(urlParameter.get("speed") ?? "1"));
 /**
  * The time that has passed since the start. (in seconds)
  */
@@ -96,14 +104,13 @@ function draw() {
     requestAnimationFrame(draw);
     if (paused)
         return;
-    const deltaTime = (performance.now() - lastDraw) / 1000;
+    const deltaTime = (performance.now() - lastDraw) / 1000 * speed;
     time += deltaTime;
-    const f = 0.5;
     context.save();
     context.translate(canvas.width / 2, canvas.height / 2);
     context.scale(1, -1);
     context.lineCap = "round";
-    pendulum?.draw(0, 0, 0);
+    pendulum?.draw(0, 0, 0, deltaTime);
     context.restore();
     lastDraw = performance.now();
 }
