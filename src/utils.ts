@@ -42,3 +42,10 @@ function randomColor(): RGBAColor {
 function colorToString(color: RGBAColor): string {
     return `rgb(${color.r},${color.g}, ${color.b})`;
 }
+
+function updateURLParameter(key: string, value: string): void {
+    const parameter = new URLSearchParams(window.location.search);
+    parameter.set(key, value);
+    const newQuery = window.location.pathname + "?" + parameter.toString();
+    history.pushState(null, '', newQuery);
+}

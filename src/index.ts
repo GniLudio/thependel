@@ -23,12 +23,22 @@ let pendulum: Pendulum = new Pendulum();
 /**
  * The pendulum count (of real pendulums).
  */
-let pendulumCount: number = Math.max(2, parseInt(urlParameter.get("count") ?? randomIntInRange(5, 10).toFixed())) + 1;
+let pendulumCount: number = parseInt(urlParameter.get("count") ?? "-1") ?? -1;
+if (performance.navigation?.type == window.performance.navigation?.TYPE_RELOAD || pendulumCount == -1) {
+    pendulumCount = randomIntInRange(5, 15);
+}
+updateURLParameter('count', pendulumCount.toString());
+console.log('Pendulum Count', pendulumCount);
 
 /**
  * The animation speed.
  */
-let speed: number = Math.max(0, parseFloat(urlParameter.get("speed") ?? "1"));
+let speed: number = parseFloat(urlParameter.get("speed") ?? "-1") ?? -1;
+if (performance.navigation?.type == window.performance.navigation?.TYPE_RELOAD || speed < 0) {
+    speed = 1;
+}
+updateURLParameter('speed', speed.toString());
+console.log('Speed', speed);
 
 /**
  * The time that has passed since the start. (in seconds)
@@ -44,6 +54,7 @@ let lastDraw: number = 0;
  * Whether the drawing is paused.
  */
 let paused: boolean = false;
+
 
 // EVENTS
 window.addEventListener("load", _ => {
@@ -73,12 +84,13 @@ window.addEventListener("focus", _ => {
  * @see https://proofwiki.org/wiki/Labeled_Tree_from_Pr%C3%BCfer_Sequence
  */
 function generateRandomPendulumTree(): void {
+    const count = pendulumCount + 1;
     // 0: create the pruefer sequence of length n-2 with values from 0 to n-1
-    const pruefer_sequence: number[] = new Array(pendulumCount-2).fill(0).map(_ => randomIntInRange(0, pendulumCount-1));
+    const pruefer_sequence: number[] = new Array(count-2).fill(0).map(_ => randomIntInRange(0, count-1));
     // 1: generate n nodes
-    const nodes: Pendulum[] = new Array(pendulumCount).fill(undefined).map(_ => new Pendulum());
+    const nodes: Pendulum[] = new Array(count).fill(undefined).map(_ => new Pendulum());
     // 2: make a list of all the integers (0, ..., n-1)
-    const list: number[] = new Array(pendulumCount).fill(0).map((_, i) => i);
+    const list: number[] = new Array(count).fill(0).map((_, i) => i);
 
     // 3: while there are more than 2 elements in the list
     while (list.length > 2) {
