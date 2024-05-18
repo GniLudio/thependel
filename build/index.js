@@ -19,7 +19,7 @@ let pendulum = new Pendulum();
 /**
  * The pendulum count (of real pendulums).
  */
-let pendulumCount = Math.max(3, parseInt(urlParameter.get("count") ?? randomIntInRange(5, 10).toFixed()));
+let pendulumCount = Math.max(2, parseInt(urlParameter.get("count") ?? randomIntInRange(5, 10).toFixed())) + 1;
 /**
  * The animation speed.
  */
@@ -84,8 +84,12 @@ function generateRandomPendulumTree() {
     }
     // 3: connect the remaining two nodes
     connect(list[0], list[1]);
+    // make graph directed
+    makeDirected(nodes[0]);
+    // the root pendulum is just a dummy (container)
+    nodes[0].isDummy = true;
+    // assign the root pendulum
     pendulum = nodes[0];
-    makeDirected(pendulum);
     function connect(a, b) {
         nodes[a].children.push(nodes[b]);
         nodes[b].children.push(nodes[a]);

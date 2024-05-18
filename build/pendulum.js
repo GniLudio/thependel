@@ -2,6 +2,10 @@
 console.log("pendulum.ts loaded");
 class Pendulum {
     /**
+     * Whether this is just a dummy. (invisible container for children)
+     */
+    isDummy;
+    /**
      * The length.
      */
     length;
@@ -51,6 +55,7 @@ class Pendulum {
             * Spinner - Fast rotation speed
             * Cleaner - Same color as background
         */
+        this.isDummy = isDummy;
         this.length = {
             base: randomIntInRange(100, 250),
             amplitude: randomInRange(10, 25),
@@ -84,7 +89,7 @@ class Pendulum {
         const x = parentX + this.getCurrentValue(this.length) * Math.cos(angle * Math.PI / 180);
         const y = parentY + this.getCurrentValue(this.length) * Math.sin(angle * Math.PI / 180);
         const currentColor = this.updateColor(deltaTime);
-        if (this.lastPosition) {
+        if (!this.isDummy && this.lastPosition) {
             context.beginPath();
             context.strokeStyle = currentColor;
             context.lineWidth = Math.max(this.getCurrentValue(this.width), 1);
