@@ -37,7 +37,6 @@ let speed: number = parseFloat(urlParameter.get("speed") ?? "-1") ?? -1;
 if (performance.navigation?.type == window.performance.navigation?.TYPE_RELOAD || speed < 0) {
     speed = 1;
 }
-updateURLParameter('speed', speed.toString());
 console.log('Speed', speed);
 
 /**
