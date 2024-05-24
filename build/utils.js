@@ -36,9 +36,19 @@ function randomColor() {
         b: randomIntInRange(0, 255),
     };
 }
+/**
+ * Converts a color to the css string representation.
+ * @param color
+ * @returns
+ */
 function colorToString(color) {
     return `rgb(${color.r},${color.g}, ${color.b})`;
 }
+/**
+ * Adds or updates a url query parameter.
+ * @param key The name.
+ * @param value The value.
+ */
 function updateURLParameter(key, value) {
     const parameter = new URLSearchParams(window.location.search);
     parameter.set(key, value);
