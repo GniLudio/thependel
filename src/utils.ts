@@ -39,10 +39,21 @@ function randomColor(): RGBAColor {
     }
 }
 
+/**
+ * Converts a color to the css string representation.
+ * @param color 
+ * @returns 
+ */
 function colorToString(color: RGBAColor): string {
     return `rgb(${color.r},${color.g}, ${color.b})`;
 }
 
+
+/**
+ * Adds or updates a url query parameter.
+ * @param key The name.
+ * @param value The value.
+ */
 function updateURLParameter(key: string, value: string): void {
     const parameter = new URLSearchParams(window.location.search);
     parameter.set(key, value);
