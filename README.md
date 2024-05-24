@@ -1,7 +1,7 @@
 # The Pendulum
 >This art project draws pendulums on the canvas.
 
-![canvas](https://github.com/GniLudio/thependel/blob/7574ffd30c277f9a7ed940929b0cfb4edef47cb8/preview.png)
+![canvas](preview.png)
 
 ## Website
 The project can be found on [thependel.art](https://thependel.art).
