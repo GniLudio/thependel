@@ -27,8 +27,8 @@ let pendulumCount: number = parseInt(urlParameter.get("count") ?? "-1") ?? -1;
 if (performance.navigation?.type == window.performance.navigation?.TYPE_RELOAD || pendulumCount == -1) {
     pendulumCount = randomIntInRange(5, 15);
 }
-updateURLParameter('count', pendulumCount.toString());
-console.log('Pendulum Count', pendulumCount);
+//updateURLParameter('count', pendulumCount.toString());
+//console.log('Pendulum Count', pendulumCount);
 
 /**
  * The animation speed.
@@ -37,7 +37,7 @@ let speed: number = parseFloat(urlParameter.get("speed") ?? "-1") ?? -1;
 if (performance.navigation?.type == window.performance.navigation?.TYPE_RELOAD || speed < 0) {
     speed = 1;
 }
-console.log('Speed', speed);
+//console.log('Speed', speed);
 
 /**
  * The time that has passed since the start. (in seconds)
@@ -75,6 +75,14 @@ window.addEventListener("focus", _ => {
     document.title = "The Pendulum";
     lastDraw = performance.now();
     paused = false;
+});
+window.addEventListener("keydown", e => {
+    console.log("Hello", e.key);
+    if (e.key == "r" || e.key == "F5") {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        pendulumCount = randomIntInRange(5, 15);
+        generateRandomPendulumTree();
+    }
 });
 
 /**
