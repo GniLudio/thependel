@@ -4,7 +4,7 @@
 ![canvas](preview.png)
 
 ## Website
-The project can be found on [thependel.art](https://thependel.art).
+The project is live at [thependel.art](https://thependel.art).
 
 ## Future Ideas
 
